@@ -1,4 +1,4 @@
-package com.github.QaReport;
+package com.github.qareport;
 
 public enum Status {
    CRITICAL("Critical"), MAJOR("Major"), MINOR("Minor");

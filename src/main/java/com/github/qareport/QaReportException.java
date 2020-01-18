@@ -1,4 +1,4 @@
-package com.github.QaReport;
+package com.github.qareport;
 
 public class QaReportException extends Exception {
 

@@ -1,4 +1,4 @@
-package com.github.QaReport;
+package com.github.qareport;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
