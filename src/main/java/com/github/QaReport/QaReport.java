@@ -1,3 +1,5 @@
+package com.github.QaReport;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -42,7 +44,7 @@ public class QaReport {
      * <p>
      * <b>setConnection(String mongoURL, String projectName, String reportName)</b>
      *
-     * <br><br>setConnection configures the mongoDb instance com.dynamics.connection, creates a database based on the project name and creates a build with the report name.
+     * <br><br>setConnection configures the mongoDb instance connection, creates a database based on the project name and creates a build with the report name.
      *
      * <br><br><b>Example: setConnection("localhost:27017", "Your Project", "Smoke")</b>
      *
@@ -81,7 +83,7 @@ public class QaReport {
      * <p>
      * <b>setConnection(String mongoURL, String userName, String password, String projectName, String reportName)</b>
      *
-     * <br><br>setConnection configures the mongoDb instance com.dynamics.connection, creates a database based on the project name and creates a build with the report name.
+     * <br><br>setConnection configures the mongoDb instance connection, creates a database based on the project name and creates a build with the report name.
      *
      * <br><br><b>Example: setConnection("localhost:27017", "admin", "password", "Your Project", "Smoke")</b>
      *

@@ -1,3 +1,5 @@
+package com.github.QaReport;
+
 public class QaReportException extends Exception {
 
     public QaReportException(String exception)

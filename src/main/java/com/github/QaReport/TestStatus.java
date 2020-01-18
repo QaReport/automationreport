@@ -1,3 +1,5 @@
+package com.github.QaReport;
+
 public enum TestStatus {
     PASS("Pass"), FAIL("Fail");
 
