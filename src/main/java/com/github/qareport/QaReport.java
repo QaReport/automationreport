@@ -13,13 +13,13 @@ public class QaReport {
 
     private MongoDatabase database;
 
-    private static int build_id;
+    private int build_id;
 
     private int previousBuildId;
 
-    private static int test_id;
+    private int test_id;
 
-    private static int logTestId;
+    private int logTestId;
 
     private String reportName;
 
@@ -35,9 +35,9 @@ public class QaReport {
 
     private String projectName;
 
-    private static int actualTestId;
+    private int actualTestId;
 
-    private static int createBuild;
+    private int createBuild;
 
 
     /**
