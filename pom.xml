@@ -6,7 +6,7 @@
 
     <groupId>com.github.QaReport</groupId>
     <artifactId>automation-report</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>automationreport is a library can be used to create automation test reports in MongoDB and visualize
         the report with MongoDB Charts
