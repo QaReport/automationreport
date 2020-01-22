@@ -7,7 +7,7 @@ automationreport generates automation test reports in MongoDB which can be visua
      <dependency>
          <groupId>com.github.QaReport</groupId>
          <artifactId>automation-report</artifactId>
-         <version>1.0-SNAPSHOT</version>
+         <version>1.1.1</version>
      </dependency>
      
 ## Requirements
@@ -58,6 +58,11 @@ automationreport generates automation test reports in MongoDB which can be visua
    ![image info](./qareport_images/qareport_mongodb_chart_firstsection.png)
    
    ![image info](./qareport_images/qareport_mongodb_chart_secondsection.png)
+
+
+
+
+
 
 
 
