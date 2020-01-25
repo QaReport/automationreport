@@ -183,45 +183,18 @@ public class QaReport {
 
         testStartTime = System.currentTimeMillis();
 
-        Document testDocument;
-
         if ("Critical".equalsIgnoreCase(status.toString())) {
 
-            testDocument = new Document("_id", actualTestId)
-                    .append("testName", testName)
-                    .append("testLog", logStart)
-                    .append("build_id", build_id)
-                    .append("Status", "Pass")
-                    .append("Tag", "Critical")
-                    .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                    .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                    .append("duration", testDuration);
+            createTestDocument(testName, "Critical");
 
         } else if ("Major".equalsIgnoreCase(status.toString())) {
 
-            testDocument = new Document("_id", actualTestId)
-                    .append("testName", testName)
-                    .append("testLog", logStart)
-                    .append("build_id", build_id)
-                    .append("Status", "Pass")
-                    .append("Tag", "Major")
-                    .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                    .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                    .append("duration", testDuration);
+            createTestDocument(testName, "Major");
 
         } else {
-            testDocument = new Document("_id", actualTestId)
-                    .append("testName", testName)
-                    .append("testLog", logStart)
-                    .append("build_id", build_id)
-                    .append("Status", "Pass")
-                    .append("Tag", "Minor")
-                    .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                    .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                    .append("duration", testDuration);
-        }
 
-        database.getCollection("tests").insertOne(testDocument);
+            createTestDocument(testName, "Minor");
+        }
 
         createBuild();
     }
@@ -236,15 +209,11 @@ public class QaReport {
      *
      * </p>
      *
-     * @param log Log for the test
+     * @param log    Log for the test
      * @param status Status of the log
      **/
     public void log(String log, TestStatus status) throws QaReportException {
         StringBuilder logBuilder = new StringBuilder(logStart);
-
-        int ascii;
-
-        String sign;
 
         if (test_id == 0) {
 
@@ -256,25 +225,7 @@ public class QaReport {
 
                 logBuilder = new StringBuilder("");
 
-                if ("Pass".equals(status.toString())) {
-
-                    ascii = 0x2714;
-
-                    sign = Character.toString((char) ascii);
-
-                } else {
-
-                    ascii = 0x2718;
-
-                    sign = Character.toString((char) ascii);
-
-                    failTest();
-
-                    failBuild();
-                }
-
-                logStart = logBuilder.append(sign).toString();
-
+                logStart = logBuilder.append(getTestLogSign(status)).toString();
 
                 logStart = logBuilder.append(log).toString();
 
@@ -285,26 +236,7 @@ public class QaReport {
             } else {
                 logStart = logBuilder.append(System.getProperty("line.separator")).toString();
 
-                if ("Pass".equals(status.toString())) {
-
-                    ascii = 0x2714;
-
-                    sign = Character.toString((char) ascii);
-
-
-                } else {
-
-                    ascii = 0x2718;
-
-                    sign = Character.toString((char) ascii);
-
-                    failTest();
-
-                    failBuild();
-
-                }
-
-                logStart = logBuilder.append(sign).toString();
+                logStart = logBuilder.append(getTestLogSign(status)).toString();
 
                 logStart = logBuilder.append(log).toString();
 
@@ -358,7 +290,6 @@ public class QaReport {
      * <br><br>failTest updates the status of the test to fail. It is to handle in cases where there is unexpected error and the log statements could not be reached. It is usually used in @After methods where the result of the test can be caught.
      *
      * </p>
-     *
      **/
     public void failTest() {
 
@@ -373,7 +304,6 @@ public class QaReport {
      * <br><br>failBuild updates the status of the build to fail. It is to handle in cases where there is unexpected error and the log statements could not be reached. It is usually used in @After methods where the result of the test can be caught.
      *
      * </p>
-     *
      **/
     public void failBuild() {
 
@@ -388,11 +318,44 @@ public class QaReport {
      * <br><br>createCoverage sets a total number of tests field in the build document which can be used for covergae charts with number of tests vs total number of tests fields in the build document.
      *
      * </p>
-     *
      **/
     public void createCoverage(int totalNumberOfTests) {
 
         database.getCollection("builds").updateOne(new BasicDBObject("_id", build_id),
                 new BasicDBObject("$set", new BasicDBObject("Total Number of Tests", totalNumberOfTests)));
+    }
+
+    private void createTestDocument(String testName, String testStatus) {
+
+        Document testDocument = new Document("_id", actualTestId)
+                .append("testName", testName)
+                .append("testLog", logStart)
+                .append("build_id", build_id)
+                .append("Status", "Pass")
+                .append("Tag", testStatus)
+                .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
+                .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
+                .append("duration", testDuration);
+
+        database.getCollection("tests").insertOne(testDocument);
+    }
+
+    private String getTestLogSign(TestStatus testStatus) {
+        String sign;
+
+        if ("Pass".equals(testStatus.toString())) {
+
+            sign = Character.toString((char) 0x2714);
+
+        } else {
+
+            sign = Character.toString((char) 0x2718);
+
+            failTest();
+
+            failBuild();
+        }
+
+        return sign;
     }
 }
