@@ -10,7 +10,7 @@ jobs:
       mongodb:
         image: mongo:4.0.4
         ports:
-          - 5000/27017-27019
+          - 5000/tcp
 
     steps:
     - uses: actions/checkout@v1
