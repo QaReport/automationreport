@@ -6,9 +6,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        mongodb-version: [4.0, 4.2]
 
     steps:
     - name: Git checkout
