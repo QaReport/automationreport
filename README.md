@@ -1,3 +1,5 @@
+![Java CI](https://github.com/QaReport/automationreport/workflows/Java%20CI/badge.svg?branch=master)
+
 # automationreport
 
 automationreport generates automation test reports in MongoDB which can be visualized with MongoDB Charts.
