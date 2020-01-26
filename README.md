@@ -12,8 +12,8 @@ automationreport generates automation test reports in MongoDB which can be visua
      
 ## Requirements
 
-1. **MongoDB instance** - *Community edition of MongoDB can be downloaded [here](https://docs.mongodb.com/manual/administration/install-community/) and installation guide can be found [here](https://docs.mongodb.com/guides/server/install/).*
-2. **Mongo Charts instance** - *Community edition of MongoDB Charts can be downloaded [here](https://www.mongodb.com/download-center/charts) and installation guide can be found [here](https://docs.mongodb.com/charts/current/installation/).*
+1. **MongoDB instance**-*Community edition of MongoDB can be downloaded [here](https://docs.mongodb.com/manual/administration/install-community/) and installation guide can be found [here](https://docs.mongodb.com/guides/server/install/).*
+2. **Mongo Charts instance**-*Community edition of MongoDB Charts can be downloaded [here](https://www.mongodb.com/download-center/charts) and installation guide can be found [here](https://docs.mongodb.com/charts/current/installation/).*
 
 ## Project Structure
 
@@ -68,15 +68,3 @@ automationreport generates automation test reports in MongoDB which can be visua
  ![image info](./qareport_images/Build Category VS Number of Builds.png)
 
  ![image info](./qareport_images/Build Category VS Number of Builds_Chart Setup.png)          
-
-
-
-
-
-
-
-
-
-
-
-
