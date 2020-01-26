@@ -31,9 +31,9 @@ automationreport generates automation test reports in MongoDB which can be visua
 
 ## Usage Guide
 
-***setConnection(mongoUrl, projectName, reportName)*** sets the connection to the mongo instance, creates a database with project name if it doesn't exist and creates a document in the build Collection with build name set to report name.
+***setConnection(mongoHost, mongoPort, projectName, reportName)*** sets the connection to the mongo instance, creates a database with project name if it doesn't exist and creates a document in the build Collection with build name set to report name.
 
-    Example : setConnection("localhost:9000", "Your Project", "Smoke");
+    Example : setConnection("localhost", "9000", "Your Project", "Smoke");
 
 ***createTest(testName, Status)*** creates a test under the created build with test name set to the test name parameter and status which can be selected among Critical, Major and Minor.
 

@@ -46,25 +46,26 @@ public class QaReport {
      *
      * <br><br>setConnection configures the mongoDb instance connection, creates a database based on the project name and creates a build with the report name.
      *
-     * <br><br><b>Example: setConnection("localhost:27017", "Your Project", "Smoke")</b>
+     * <br><br><b>Example: setConnection("localhost", "27017", "Your Project", "Smoke")</b>
      *
      * </p>
      *
-     * @param mongoURL    Connection URL for mongodb
+     * @param mongoHost   Connection host for MongoDB
+     * @param mongoPort   connection port for MongoDB
      * @param projectName Database name to be set
      * @param reportName  Build name to be set
      **/
-    public void setConnection(String mongoURL, String projectName, String reportName) {
+    public void setConnection(String mongoHost, String mongoPort, String projectName, String reportName) {
 
         this.projectName = projectName;
 
         this.reportName = reportName;
 
-        MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://" + mongoURL));
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s", mongoHost, mongoPort)));
 
         database = mongoClient.getDatabase(this.projectName);
 
-        Document lastBuildId = new MongoClient().getDatabase(this.projectName).getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
+        Document lastBuildId = new MongoClient(mongoHost, Integer.parseInt(mongoPort)).getDatabase(this.projectName).getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
 
         if (lastBuildId != null) {
 
@@ -85,23 +86,24 @@ public class QaReport {
      *
      * <br><br>setConnection configures the mongoDb instance connection, creates a database based on the project name and creates a build with the report name.
      *
-     * <br><br><b>Example: setConnection("localhost:27017", "admin", "password", "Your Project", "Smoke")</b>
+     * <br><br><b>Example: setConnection("localhost",  "27017", "admin", "password", "Your Project", "Smoke")</b>
      *
      * </p>
      *
-     * @param mongoURL    Connection URL for mongodb
+     * @param mongoHost   Connection host for MongoDB
+     * @param mongoPort   connection port for MongoDB
      * @param projectName Database name to be set
      * @param userName    username for mongodb
      * @param password    password for mongodb
      * @param reportName  Build name to be set
      **/
-    public void setConnection(String mongoURL, String userName, String password, String projectName, String reportName) {
+    public void setConnection(String mongoHost, String mongoPort, String userName, String password, String projectName, String reportName) {
 
         this.projectName = projectName;
 
         this.reportName = reportName;
 
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s@%s", userName, password, mongoURL)));
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s@%s:%s", userName, password, mongoHost, mongoPort)));
 
         database = mongoClient.getDatabase(this.projectName);
 

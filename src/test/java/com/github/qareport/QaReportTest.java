@@ -21,11 +21,11 @@ public class QaReportTest {
     @Test
     private void testSetConnectionCreatesABuild()
     {
-        MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://" + "localhost:27017"));
+        MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://" + "localhost:5000"));
 
         database = mongoClient.getDatabase("qaReportAutomate");
 
-        Document lastBuildDocument = new MongoClient().getDatabase("qaReportAutomate").getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
+        Document lastBuildDocument = new MongoClient("localhost" , 5000).getDatabase("qaReportAutomate").getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
 
         if (lastBuildDocument != null) {
 
@@ -36,9 +36,9 @@ public class QaReportTest {
             previousBuildId = 0;
         }
 
-        qaReport.setConnection("localhost:27017", "qaReportAutomate", "Feature");
+        qaReport.setConnection("localhost", "5000", "qaReportAutomate", "Feature");
 
-        int buildId = (Integer) Objects.requireNonNull(new MongoClient().getDatabase("qaReportAutomate").getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first()).get("_id");
+        int buildId = (Integer) Objects.requireNonNull(new MongoClient("localhost", 5000).getDatabase("qaReportAutomate").getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first()).get("_id");
 
         Assert.assertEquals(buildId, previousBuildId+1, "setConnection should create a build using the connection parameters" );
     }
