@@ -39,10 +39,6 @@ public class QaReport {
 
     private int createBuild;
 
-    private String mongoHost;
-
-    private int mongoPort;
-
     private MongoClient mongoClient;
 
 
@@ -66,10 +62,6 @@ public class QaReport {
         this.projectName = projectName;
 
         this.reportName = reportName;
-
-        this.mongoHost= mongoHost;
-
-        this.mongoPort=mongoPort;
 
         mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s", mongoHost, mongoPort)));
 
@@ -105,10 +97,6 @@ public class QaReport {
         this.projectName = projectName;
 
         this.reportName = reportName;
-
-        this.mongoHost= mongoHost;
-
-        this.mongoPort=mongoPort;
 
         mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s@%s:%s", userName, password, mongoHost, mongoPort)));
 
