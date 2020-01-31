@@ -36,9 +36,9 @@ public class QaReportTest {
             previousBuildId = 0;
         }
 
-        qaReport.setConnection("localhost", "27017", "qaReportAutomate", "Feature");
+        qaReport.setConnection("localhost", 27017, "qaReportAutomate", "Feature");
 
-        int buildId = (Integer) Objects.requireNonNull(new MongoClient("localhost", 27017).getDatabase("qaReportAutomate").getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first()).get("_id");
+        int buildId = (Integer) Objects.requireNonNull(mongoClient.getDatabase("qaReportAutomate").getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first()).get("_id");
 
         Assert.assertEquals(buildId, previousBuildId+1, "setConnection should create a build using the connection parameters" );
     }

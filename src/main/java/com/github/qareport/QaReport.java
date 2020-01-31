@@ -39,6 +39,12 @@ public class QaReport {
 
     private int createBuild;
 
+    private String mongoHost;
+
+    private int mongoPort;
+
+    private MongoClient mongoClient;
+
 
     /**
      * <p>
@@ -55,26 +61,23 @@ public class QaReport {
      * @param projectName Database name to be set
      * @param reportName  Build name to be set
      **/
-    public void setConnection(String mongoHost, String mongoPort, String projectName, String reportName) {
+    public void setConnection(String mongoHost, int mongoPort, String projectName, String reportName) {
 
         this.projectName = projectName;
 
         this.reportName = reportName;
 
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s", mongoHost, mongoPort)));
+        this.mongoHost= mongoHost;
+
+        this.mongoPort=mongoPort;
+
+        mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s", mongoHost, mongoPort)));
 
         database = mongoClient.getDatabase(this.projectName);
 
-        Document lastBuildId = new MongoClient(mongoHost, Integer.parseInt(mongoPort)).getDatabase(this.projectName).getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
+        Document lastBuildId = mongoClient.getDatabase(this.projectName).getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
 
-        if (lastBuildId != null) {
-
-            previousBuildId = (Integer) (lastBuildId.get("_id"));
-
-        } else {
-
-            previousBuildId = 0;
-        }
+        previousBuildId = (lastBuildId != null) ? (Integer) (lastBuildId.get("_id")) : 0;
 
         createBuild();
 
@@ -97,26 +100,23 @@ public class QaReport {
      * @param password    password for mongodb
      * @param reportName  Build name to be set
      **/
-    public void setConnection(String mongoHost, String mongoPort, String userName, String password, String projectName, String reportName) {
+    public void setConnection(String mongoHost, int mongoPort, String userName, String password, String projectName, String reportName) {
 
         this.projectName = projectName;
 
         this.reportName = reportName;
 
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s@%s:%s", userName, password, mongoHost, mongoPort)));
+        this.mongoHost= mongoHost;
+
+        this.mongoPort=mongoPort;
+
+        mongoClient = new MongoClient(new MongoClientURI(String.format("mongodb://%s:%s@%s:%s", userName, password, mongoHost, mongoPort)));
 
         database = mongoClient.getDatabase(this.projectName);
 
-        Document lastBuildId = new MongoClient().getDatabase(this.projectName).getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
+        Document lastBuildId = mongoClient.getDatabase(this.projectName).getCollection("builds").find().sort(new BasicDBObject("_id", -1)).first();
 
-        if (lastBuildId != null) {
-
-            previousBuildId = (Integer) (lastBuildId.get("_id"));
-
-        } else {
-
-            previousBuildId = 0;
-        }
+        previousBuildId = (lastBuildId != null) ? (Integer) (lastBuildId.get("_id")) : 0;
 
         createBuild();
 
@@ -132,15 +132,13 @@ public class QaReport {
 
             build_id = previousBuildId + 1;
 
-            Document buildDocument = new Document("_id", build_id)
+            database.getCollection("builds").insertOne(new Document("_id", build_id)
                     .append("build_name", reportName)
                     .append("number_of_tests", test_id)
                     .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
                     .append("ended_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
                     .append("duration", buildDuration).append("Status", "Pass")
-                    .append("Total Number of Tests", test_id);
-
-            database.getCollection("builds").insertOne(buildDocument);
+                    .append("Total Number of Tests", test_id));
 
         } else {
 
@@ -168,16 +166,9 @@ public class QaReport {
 
         if (test_id == 1) {
 
-            Document lastTestId = new MongoClient().getDatabase(this.projectName).getCollection("tests").find().sort(new BasicDBObject("_id", -1)).first();
+            Document lastTestId = mongoClient.getDatabase(this.projectName).getCollection("tests").find().sort(new BasicDBObject("_id", -1)).first();
 
-            if (lastTestId != null) {
-
-                actualTestId = (Integer) lastTestId.get("_id");
-
-            } else {
-
-                actualTestId = 0;
-            }
+            actualTestId = (lastTestId != null) ? (Integer) (lastTestId.get("_id")) : 0;
 
         }
 
@@ -329,7 +320,7 @@ public class QaReport {
 
     private void createTestDocument(String testName, String testStatus) {
 
-        Document testDocument = new Document("_id", actualTestId)
+        database.getCollection("tests").insertOne(new Document("_id", actualTestId)
                 .append("testName", testName)
                 .append("testLog", logStart)
                 .append("build_id", build_id)
@@ -337,9 +328,7 @@ public class QaReport {
                 .append("Tag", testStatus)
                 .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
                 .append("created_time", new SimpleDateFormat("M/d/yyyy hh:mm:ss").format(Calendar.getInstance().getTime()))
-                .append("duration", testDuration);
-
-        database.getCollection("tests").insertOne(testDocument);
+                .append("duration", testDuration));
     }
 
     private String getTestLogSign(TestStatus testStatus) {
